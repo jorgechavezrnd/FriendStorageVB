@@ -24,6 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FriendStorageVB.DataAccess\FriendStorageVB.DataAccess.vbproj" />
+    <ProjectReference Include="..\FriendStorageVB.Model\FriendStorageVB.Model.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="FriendStorageIcon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
