@@ -4,7 +4,7 @@ Imports FriendStorageVB.Model
 Public Class NavigationDataProvider
     Implements INavigationDataProvider
 
-    Private m_dataServiceCreator As Func(Of IDataService)
+    Private ReadOnly m_dataServiceCreator As Func(Of IDataService)
 
     Sub New(dataServiceCreator As Func(Of IDataService))
         m_dataServiceCreator = dataServiceCreator

@@ -6,7 +6,7 @@
 
     Public Event CanExecuteChanged As EventHandler Implements ICommand.CanExecuteChanged
 
-    Public Sub New(execute As Action(Of Object), canExecute As Func(Of Object, Boolean))
+    Public Sub New(execute As Action(Of Object), Optional canExecute As Func(Of Object, Boolean) = Nothing)
         If execute Is Nothing Then
             Throw New ArgumentNullException(NameOf(execute))
         End If

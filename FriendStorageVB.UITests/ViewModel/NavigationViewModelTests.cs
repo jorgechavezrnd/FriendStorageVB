@@ -1,6 +1,7 @@
 ﻿using FriendStorageVB.Model;
 using FriendStorageVB.UI;
 using Moq;
+using Prism.Events;
 using Xunit;
 
 namespace FriendStorageVB.UITests.ViewModel
@@ -11,6 +12,7 @@ namespace FriendStorageVB.UITests.ViewModel
 
         public NavigationViewModelTests()
         {
+            var eventAggregatorMock = new Mock<IEventAggregator>();
             var navigationDataProviderMock = new Mock<INavigationDataProvider>();
             navigationDataProviderMock.Setup(dp => dp.GetAllFriends())
                 .Returns(new List<LookupItem>
@@ -19,7 +21,8 @@ namespace FriendStorageVB.UITests.ViewModel
                     new LookupItem { Id = 2, DisplayMember = "Thomas" }
                 });
             _viewModel = new NavigationViewModel(
-                navigationDataProviderMock.Object);
+                navigationDataProviderMock.Object,
+                eventAggregatorMock.Object);
         }
 
         [Fact]
