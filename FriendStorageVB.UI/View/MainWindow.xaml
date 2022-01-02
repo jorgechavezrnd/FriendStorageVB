@@ -74,7 +74,7 @@
         </TabControl>
         
         <!-- Footer -->
-        <TextBlock Text="Created by Jorge Carlos Chavez Ruiz, 2021" Margin="10" Grid.Row="3" Grid.ColumnSpan="3" Foreground="LightGray" />
+        <TextBlock Text="Created by Jorge Carlos Chavez Ruiz, 2022" Margin="10" Grid.Row="3" Grid.ColumnSpan="3" Foreground="LightGray" />
     </Grid>
 
 </Window>
