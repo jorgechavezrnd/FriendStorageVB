@@ -21,6 +21,12 @@ Public Class NavigationViewModel
         Friends = New ObservableCollection(Of NavigationItemViewModel)()
         m_dataProvider = dataProvider
         m_eventAggregator = eventAggregator
+        m_eventAggregator.GetEvent(Of FriendSavedEvent).Subscribe(Sub([friend]) OnFriendSaved([friend]))
+    End Sub
+
+    Private Sub OnFriendSaved([friend] As [Friend])
+        Dim navigationItem = Friends.Single(Function(f) f.Id = [friend].Id)
+        navigationItem.DisplayMember = $"{[friend].FirstName} {[friend].LastName}"
     End Sub
 
     Public Sub Load() Implements INavigationViewModel.Load

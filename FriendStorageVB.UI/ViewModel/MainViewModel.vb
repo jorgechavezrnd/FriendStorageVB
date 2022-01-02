@@ -5,7 +5,7 @@ Public Class MainViewModel
     Inherits ViewModelBase
 
     Private m_selectedFriendEditViewModel As IFriendEditViewModel
-    Private m_friendEditVmCreator As Func(Of IFriendEditViewModel)
+    Private ReadOnly m_friendEditVmCreator As Func(Of IFriendEditViewModel)
 
     Public ReadOnly Property NavigationViewModel As INavigationViewModel
     Public ReadOnly Property FriendEditViewModels As ObservableCollection(Of IFriendEditViewModel)
@@ -19,6 +19,16 @@ Public Class MainViewModel
         End Set
     End Property
 
+    Private m_closeFriendTabCommand As ICommand
+    Public Property CloseFriendTabCommand As ICommand
+        Get
+            Return m_closeFriendTabCommand
+        End Get
+        Private Set(value As ICommand)
+            m_closeFriendTabCommand = value
+        End Set
+    End Property
+
     Sub New(navigationViewModel As INavigationViewModel,
             friendEditVmCreator As Func(Of IFriendEditViewModel),
             eventAggregator As IEventAggregator)
@@ -26,6 +36,12 @@ Public Class MainViewModel
         FriendEditViewModels = New ObservableCollection(Of IFriendEditViewModel)
         m_friendEditVmCreator = friendEditVmCreator
         eventAggregator.GetEvent(Of OpenFriendEditViewEvent).Subscribe(Sub(friendId) OnOpenFriendEditView(friendId))
+        CloseFriendTabCommand = New DelegateCommand(Sub(obj) OnCloseFriendTabExecute(obj))
+    End Sub
+
+    Private Sub OnCloseFriendTabExecute(obj As Object)
+        Dim friendEditVm = CType(obj, IFriendEditViewModel)
+        FriendEditViewModels.Remove(friendEditVm)
     End Sub
 
     Private Sub OnOpenFriendEditView(friendId As Integer)

@@ -1,6 +1,10 @@
 ﻿Imports Prism.Events
 
 Public Class NavigationItemViewModel
+    Inherits ViewModelBase
+
+    Private m_displayMember As String
+    Private ReadOnly m_eventAggregator As IEventAggregator
 
     Sub New(id As Integer, displayMember As String, eventAggregator As IEventAggregator)
         Me.Id = id
@@ -15,9 +19,16 @@ Public Class NavigationItemViewModel
     End Sub
 
     Public ReadOnly Property Id As Integer
-    Public ReadOnly Property DisplayMember As String
     Public ReadOnly Property OpenFriendEditViewCommand As ICommand
 
-    Private ReadOnly m_eventAggregator As IEventAggregator
+    Public Property DisplayMember As String
+        Get
+            Return m_displayMember
+        End Get
+        Set(value As String)
+            m_displayMember = value
+            OnPropertyChanged()
+        End Set
+    End Property
 
 End Class

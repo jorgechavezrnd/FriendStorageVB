@@ -36,7 +36,7 @@ namespace FriendStorageVB.UITests.ViewModel
                 .Callback<int>(friendId =>
                 {
                     friendEditViewModelMock.Setup(vm => vm.Friend)
-                    .Returns(new Friend { Id = friendId });
+                    .Returns(new FriendWrapper(new Friend { Id = friendId }));
                 });
             _friendEditViewModelMocks.Add(friendEditViewModelMock);
             return friendEditViewModelMock.Object;
@@ -84,6 +84,18 @@ namespace FriendStorageVB.UITests.ViewModel
             }, nameof(_viewModel.SelectedFriendEditViewModel));
 
             Assert.True(fired);
+        }
+
+        [Fact]
+        public void ShouldRemoveFriendEditViewModelOnCloseFriendTabCommand()
+        {
+            _openFriendEditViewEvent.Publish(7);
+
+            var friendEditVm = _viewModel.SelectedFriendEditViewModel;
+
+            _viewModel.CloseFriendTabCommand.Execute(friendEditVm);
+
+            Assert.Equal(0, _viewModel.FriendEditViewModels.Count);
         }
     }
 }
