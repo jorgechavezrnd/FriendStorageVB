@@ -1,10 +1,10 @@
 ﻿Public Class MainViewModel
     Inherits ViewModelBase
 
-    Public ReadOnly Property NavigationViewModel As NavigationViewModel
+    Public ReadOnly Property NavigationViewModel As INavigationViewModel
 
-    Sub New()
-        NavigationViewModel = New NavigationViewModel()
+    Sub New(navigationViewModel As INavigationViewModel)
+        Me.NavigationViewModel = navigationViewModel
     End Sub
 
     Public Sub Load()

@@ -1,21 +1,29 @@
 ﻿Imports System.Collections.ObjectModel
-Imports FriendStorageVB.DataAccess
 Imports FriendStorageVB.Model
+
+Public Interface INavigationViewModel
+
+    Sub Load()
+
+End Interface
 
 Public Class NavigationViewModel
     Inherits ViewModelBase
+    Implements INavigationViewModel
 
-    Public ReadOnly Property Friends As ObservableCollection(Of [Friend])
+    Public ReadOnly Property Friends As ObservableCollection(Of LookupItem)
 
-    Sub New()
-        Friends = New ObservableCollection(Of [Friend])()
+    Private ReadOnly m_dataProvider As INavigationDataProvider
+
+    Sub New(dataProvider As INavigationDataProvider)
+        Friends = New ObservableCollection(Of LookupItem)()
+        m_dataProvider = dataProvider
     End Sub
 
-    Public Sub Load()
-        Dim dataService = New FileDataService()
-
-        For Each [friend] In dataService.GetAllFriends()
-            Friends.Add([friend])
+    Public Sub Load() Implements INavigationViewModel.Load
+        Friends.Clear()
+        For Each lookupItem In m_dataProvider.GetAllFriends()
+            Friends.Add(lookupItem)
         Next
     End Sub
 

@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FriendStorageVB.DataAccess\FriendStorageVB.DataAccess.vbproj" />
     <ProjectReference Include="..\FriendStorageVB.Model\FriendStorageVB.Model.vbproj" />
   </ItemGroup>

@@ -27,11 +27,18 @@ Public Class FileDataService
         SaveToFile(friends)
     End Sub
 
-    Public Function GetAllFriends() As IEnumerable(Of [Friend]) Implements IDataService.GetAllFriends
-        Return ReadFromFile()
+    Public Function GetAllFriends() As IEnumerable(Of LookupItem) Implements IDataService.GetAllFriends
+        Return ReadFromFile() _
+            .Select(Function(f) New LookupItem With
+            {
+                .Id = f.Id,
+                .DisplayMember = $"{f.FirstName} {f.LastName}"
+            })
     End Function
 
     Public Sub Dispose() Implements IDisposable.Dispose
+        ' Usually Service-Proxies are disposable. This method Is added as demo-purpose
+        ' to show how to use an IDisposable in the client with a Func<T>. =>  Look for example at the FriendDataProvider-class
     End Sub
 
     Private Sub InsertFriend([friend] As [Friend])

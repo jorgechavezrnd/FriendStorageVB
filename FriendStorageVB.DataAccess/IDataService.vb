@@ -6,6 +6,6 @@ Public Interface IDataService
     Function GetFriendById(friendId As Integer) As [Friend]
     Sub SaveFriend([friend] As [Friend])
     Sub DeleteFriend(friendId As Integer)
-    Function GetAllFriends() As IEnumerable(Of [Friend])
+    Function GetAllFriends() As IEnumerable(Of LookupItem)
 
 End Interface
