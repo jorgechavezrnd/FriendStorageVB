@@ -68,6 +68,17 @@ namespace FriendStorageVB.UITests.ViewModel
         }
 
         [Fact]
+        public void ShouldAddFriendEditViewModelAndLoadItWithIdNullAndSelectIt()
+        {
+            _viewModel.AddFriendCommand.Execute(null);
+
+            Assert.Equal(1, _viewModel.FriendEditViewModels.Count);
+            var friendEditVm = _viewModel.FriendEditViewModels.First();
+            Assert.Equal(friendEditVm, _viewModel.SelectedFriendEditViewModel);
+            _friendEditViewModelMocks.First().Verify(vm => vm.Load(null), Times.Once);
+        }
+
+        [Fact]
         public void ShouldAddFriendEditViewModelsOnlyOnce()
         {
             _openFriendEditViewEvent.Publish(5);

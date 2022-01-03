@@ -10,6 +10,9 @@ Public Class BootStrapper
         builder.RegisterType(Of EventAggregator) _
             .As(Of IEventAggregator).SingleInstance()
 
+        builder.RegisterType(Of MessageDialogService) _
+            .As(Of IMessageDialogService)()
+
         builder.RegisterType(Of MainWindow).AsSelf()
         builder.RegisterType(Of MainViewModel).AsSelf()
 

@@ -15,12 +15,15 @@ Public Class FriendEditViewModel
 
     Private ReadOnly m_dataProvider As IFriendDataProvider
     Private ReadOnly m_eventAggregator As IEventAggregator
+    Private ReadOnly m_messageDialogService As IMessageDialogService
     Private m_friend As FriendWrapper
 
     Sub New(dataProvider As IFriendDataProvider,
-            eventAggregator As IEventAggregator)
+            eventAggregator As IEventAggregator,
+            messageDialogService As IMessageDialogService)
         m_dataProvider = dataProvider
         m_eventAggregator = eventAggregator
+        m_messageDialogService = messageDialogService
         SaveCommand = New DelegateCommand(Sub(obj) OnSaveExecute(obj), Function(arg) OnSaveCanExecute(arg))
         DeleteCommand = New DelegateCommand(Sub(obj) OnDeleteExecute(obj), Function(arg) OnDeleteCanExecute(arg))
     End Sub
@@ -87,8 +90,12 @@ Public Class FriendEditViewModel
     End Function
 
     Private Sub OnDeleteExecute(obj As Object)
-        m_dataProvider.DeleteFriend([Friend].Id)
-        m_eventAggregator.GetEvent(Of FriendDeletedEvent).Publish([Friend].Id)
+        Dim result = m_messageDialogService.ShowYesNoDialog("Delete Friend",
+            $"Do you really want to delete the friend '{[Friend].FirstName} {[Friend].LastName}'")
+        If result = MessageDialogResult.Yes Then
+            m_dataProvider.DeleteFriend([Friend].Id)
+            m_eventAggregator.GetEvent(Of FriendDeletedEvent).Publish([Friend].Id)
+        End If
     End Sub
 
     Private Function OnDeleteCanExecute(arg As Object) As Boolean
