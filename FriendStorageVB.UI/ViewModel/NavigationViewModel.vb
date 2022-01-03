@@ -22,6 +22,12 @@ Public Class NavigationViewModel
         m_dataProvider = dataProvider
         m_eventAggregator = eventAggregator
         m_eventAggregator.GetEvent(Of FriendSavedEvent).Subscribe(Sub([friend]) OnFriendSaved([friend]))
+        m_eventAggregator.GetEvent(Of FriendDeletedEvent).Subscribe(Sub(friendId) OnFriendDeleted(friendId))
+    End Sub
+
+    Private Sub OnFriendDeleted(friendId As Integer)
+        Dim navigationItem = Friends.Single(Function(n) n.Id = friendId)
+        Friends.Remove(navigationItem)
     End Sub
 
     Private Sub OnFriendSaved([friend] As [Friend])

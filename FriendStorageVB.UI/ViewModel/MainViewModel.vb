@@ -46,8 +46,14 @@ Public Class MainViewModel
         FriendEditViewModels = New ObservableCollection(Of IFriendEditViewModel)
         m_friendEditVmCreator = friendEditVmCreator
         eventAggregator.GetEvent(Of OpenFriendEditViewEvent).Subscribe(Sub(friendId) OnOpenFriendEditView(friendId))
+        eventAggregator.GetEvent(Of FriendDeletedEvent).Subscribe(Sub(friendId) OnFriendDeleted(friendId))
         CloseFriendTabCommand = New DelegateCommand(Sub(obj) OnCloseFriendTabExecute(obj))
         AddFriendCommand = New DelegateCommand(Sub(obj) OnAddFriendExecute(obj))
+    End Sub
+
+    Private Sub OnFriendDeleted(friendId As Integer)
+        Dim friendEditVm = FriendEditViewModels.Single(Function(vm) vm.Friend.Id = friendId)
+        FriendEditViewModels.Remove(friendEditVm)
     End Sub
 
     Private Sub OnCloseFriendTabExecute(obj As Object)

@@ -22,6 +22,7 @@ Public Class FriendEditViewModel
         m_dataProvider = dataProvider
         m_eventAggregator = eventAggregator
         SaveCommand = New DelegateCommand(Sub(obj) OnSaveExecute(obj), Function(arg) OnSaveCanExecute(arg))
+        DeleteCommand = New DelegateCommand(Sub(obj) OnDeleteExecute(obj), Function(arg) OnDeleteCanExecute(arg))
     End Sub
 
     Private m_saveCommand As ICommand
@@ -31,6 +32,16 @@ Public Class FriendEditViewModel
         End Get
         Private Set(value As ICommand)
             m_saveCommand = value
+        End Set
+    End Property
+
+    Private m_deleteCommand As ICommand
+    Public Property DeleteCommand As ICommand
+        Get
+            Return m_deleteCommand
+        End Get
+        Private Set(value As ICommand)
+            m_deleteCommand = value
         End Set
     End Property
 
@@ -53,11 +64,16 @@ Public Class FriendEditViewModel
 
         AddHandler Me.Friend.PropertyChanged, Sub(sender, e) Friend_PropertyChanged(sender, e)
 
-        CType(SaveCommand, DelegateCommand).RaiseCanExecuteChanged()
+        InvalidateCommands()
     End Sub
 
     Private Sub Friend_PropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        InvalidateCommands()
+    End Sub
+
+    Private Sub InvalidateCommands()
         CType(SaveCommand, DelegateCommand).RaiseCanExecuteChanged()
+        CType(DeleteCommand, DelegateCommand).RaiseCanExecuteChanged()
     End Sub
 
     Private Sub OnSaveExecute(obj As Object)
@@ -68,6 +84,15 @@ Public Class FriendEditViewModel
 
     Private Function OnSaveCanExecute(arg As Object) As Boolean
         Return [Friend] IsNot Nothing AndAlso [Friend].IsChanged
+    End Function
+
+    Private Sub OnDeleteExecute(obj As Object)
+        m_dataProvider.DeleteFriend([Friend].Id)
+        m_eventAggregator.GetEvent(Of FriendDeletedEvent).Publish([Friend].Id)
+    End Sub
+
+    Private Function OnDeleteCanExecute(arg As Object) As Boolean
+        Return [Friend] IsNot Nothing AndAlso [Friend].Id > 0
     End Function
 
 End Class
