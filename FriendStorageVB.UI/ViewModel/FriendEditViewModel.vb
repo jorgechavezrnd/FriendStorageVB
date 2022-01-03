@@ -4,7 +4,7 @@ Imports Prism.Events
 
 Public Interface IFriendEditViewModel
 
-    Sub Load(friendId As Integer)
+    Sub Load(friendId As Integer?)
     Property [Friend] As FriendWrapper
 
 End Interface
@@ -44,8 +44,10 @@ Public Class FriendEditViewModel
         End Set
     End Property
 
-    Public Sub Load(friendId As Integer) Implements IFriendEditViewModel.Load
-        Dim [friend] = m_dataProvider.GetFriendById(friendId)
+    Public Sub Load(friendId As Integer?) Implements IFriendEditViewModel.Load
+        Dim [friend] = If(friendId.HasValue,
+                          m_dataProvider.GetFriendById(friendId),
+                          New [Friend])
 
         Me.Friend = New FriendWrapper([friend])
 

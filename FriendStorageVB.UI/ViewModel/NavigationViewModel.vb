@@ -25,8 +25,14 @@ Public Class NavigationViewModel
     End Sub
 
     Private Sub OnFriendSaved([friend] As [Friend])
-        Dim navigationItem = Friends.Single(Function(f) f.Id = [friend].Id)
-        navigationItem.DisplayMember = $"{[friend].FirstName} {[friend].LastName}"
+        Dim displayMember = $"{[friend].FirstName} {[friend].LastName}"
+        Dim navigationItem = Friends.SingleOrDefault(Function(n) n.Id = [friend].Id)
+        If navigationItem IsNot Nothing Then
+            navigationItem.DisplayMember = displayMember
+        Else
+            navigationItem = New NavigationItemViewModel([friend].Id, displayMember, m_eventAggregator)
+            Friends.Add(navigationItem)
+        End If
     End Sub
 
     Public Sub Load() Implements INavigationViewModel.Load

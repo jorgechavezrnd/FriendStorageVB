@@ -19,6 +19,16 @@ Public Class MainViewModel
         End Set
     End Property
 
+    Private m_addFriendCommand As ICommand
+    Public Property AddFriendCommand As ICommand
+        Get
+            Return m_addFriendCommand
+        End Get
+        Private Set(value As ICommand)
+            m_addFriendCommand = value
+        End Set
+    End Property
+
     Private m_closeFriendTabCommand As ICommand
     Public Property CloseFriendTabCommand As ICommand
         Get
@@ -37,6 +47,7 @@ Public Class MainViewModel
         m_friendEditVmCreator = friendEditVmCreator
         eventAggregator.GetEvent(Of OpenFriendEditViewEvent).Subscribe(Sub(friendId) OnOpenFriendEditView(friendId))
         CloseFriendTabCommand = New DelegateCommand(Sub(obj) OnCloseFriendTabExecute(obj))
+        AddFriendCommand = New DelegateCommand(Sub(obj) OnAddFriendExecute(obj))
     End Sub
 
     Private Sub OnCloseFriendTabExecute(obj As Object)
@@ -44,12 +55,21 @@ Public Class MainViewModel
         FriendEditViewModels.Remove(friendEditVm)
     End Sub
 
+    Private Sub OnAddFriendExecute(obj As Object)
+        SelectedFriendEditViewModel = CreateAndLoadFriendEditViewModel(Nothing)
+    End Sub
+
+    Private Function CreateAndLoadFriendEditViewModel(friendId As Integer?) As IFriendEditViewModel
+        Dim friendEditVm = m_friendEditVmCreator()
+        FriendEditViewModels.Add(friendEditVm)
+        friendEditVm.Load(friendId)
+        Return friendEditVm
+    End Function
+
     Private Sub OnOpenFriendEditView(friendId As Integer)
         Dim friendEditVm = FriendEditViewModels.SingleOrDefault(Function(vm) vm.Friend.Id = friendId)
         If friendEditVm Is Nothing Then
-            friendEditVm = m_friendEditVmCreator()
-            FriendEditViewModels.Add(friendEditVm)
-            friendEditVm.Load(friendId)
+            friendEditVm = CreateAndLoadFriendEditViewModel(friendId)
         End If
         SelectedFriendEditViewModel = friendEditVm
     End Sub

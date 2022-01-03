@@ -33,10 +33,10 @@ namespace FriendStorageVB.UITests.ViewModel
         {
             var friendEditViewModelMock = new Mock<IFriendEditViewModel>();
             friendEditViewModelMock.Setup(vm => vm.Load(It.IsAny<int>()))
-                .Callback<int>(friendId =>
+                .Callback<int?>(friendId =>
                 {
                     friendEditViewModelMock.Setup(vm => vm.Friend)
-                    .Returns(new FriendWrapper(new Friend { Id = friendId }));
+                    .Returns(new FriendWrapper(new Friend { Id = friendId.Value }));
                 });
             _friendEditViewModelMocks.Add(friendEditViewModelMock);
             return friendEditViewModelMock.Object;
